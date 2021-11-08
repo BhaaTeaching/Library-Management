@@ -1,2 +1,17 @@
 server:
   port: 3030
+spring:
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:5306/Library
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  flyway:
+    enabled: false
+  liquibase:
+    enabled: true
+    change-log: classpath:/liquibase/changelog-master.yaml

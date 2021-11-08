@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - includeAll:
+      path: db_changes/
+      relativeToChangelogFile: true
+#  - changeSet:
+#      id: 1_add-Domain-table
+#      author: bhaa
+#      changes:
+#        - createTable:
+#            tableName: Domain1
+#            columns:
+#              - column:
+#                  name: id
+#                  type: bigint(20)
+#                  autoIncrement: true
+#                  startWith: 0
+#                  constraints:
+#                    primaryKey: true
+#                    nullable: false
