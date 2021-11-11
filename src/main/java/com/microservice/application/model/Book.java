@@ -1,6 +1,6 @@
 package com.microservice.application.model;
 
-import com.microservice.application.controller.dto.request.BookDto;
+import com.microservice.application.controller.dto.request.BookRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,16 +23,22 @@ public class Book {
     @Column
     private String name;
     @Column
-    private String writer_name;
+    private String author;
+    @Column
+    private String subject;
     @Column
     private Integer copies;
     @Column
+    private Integer existingCopies;
+    @Column
     private String location;
 
-    public Book(BookDto bookDto) {
-        this.name = bookDto.getName();
-        this.writer_name = bookDto.getWriterName();
-        this.copies = bookDto.getCopies();
-        this.location = bookDto.getLocation();
+    public Book(BookRequestDto bookRequestDto) {
+        this.name = bookRequestDto.getName();
+        this.author = bookRequestDto.getWriterName();
+        this.copies = bookRequestDto.getCopies();
+        this.location = bookRequestDto.getLocation();
+        this.subject = bookRequestDto.getSubject();
+        this.existingCopies = bookRequestDto.getExistingCopies();
     }
 }

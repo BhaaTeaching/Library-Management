@@ -1,6 +1,6 @@
 package com.microservice.application.controller;
 
-import com.microservice.application.controller.dto.request.BookDto;
+import com.microservice.application.controller.dto.request.BookRequestDto;
 import com.microservice.application.services.BookService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,18 +23,33 @@ public class BookController extends BaseController {
     }
 
     @PostMapping("/add-book")
-    public ResponseEntity<Object> addBook(@RequestBody BookDto bookDto) {
-        return responseEntity(bookService.addBook(bookDto));
+    public ResponseEntity<Object> addBook(@RequestBody BookRequestDto bookRequestDto) {
+        return responseEntity(bookService.addBook(bookRequestDto));
     }
 
     @GetMapping("/get-book/{bookId}")
-    public ResponseEntity<Object> getBook(@PathVariable Long bookId) throws NotFoundException {
-        return responseEntity(bookService.getBook(bookId));
+    public ResponseEntity<Object> getBookById(@PathVariable Long bookId) throws NotFoundException {
+        return responseEntity(bookService.getBookById(bookId));
+    }
+
+    @GetMapping("/get-book-by-name")
+    public ResponseEntity<Object> getBookByName(@RequestParam String name) throws NotFoundException {
+        return responseEntity(bookService.getBookByName(name));
+    }
+
+    @GetMapping("/get-book-by-author")
+    public ResponseEntity<Object> getBookByAuthor(@RequestParam String author) throws NotFoundException {
+        return responseEntity(bookService.getBookByAuthor(author));
+    }
+
+    @GetMapping("/get-book-by-subject")
+    public ResponseEntity<Object> getBookBySubject(@RequestParam String subject) throws NotFoundException {
+        return responseEntity(bookService.getBookBySubject(subject));
     }
 
     @PutMapping("edit-book/{bookId}")
-    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookDto bookDto) throws NotFoundException {
-        return responseEntity(bookService.editBook(bookId, bookDto));
+    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws NotFoundException {
+        return responseEntity(bookService.editBook(bookId, bookRequestDto));
     }
 
     @DeleteMapping("remove-book/{bookId}")
