@@ -1,36 +1,36 @@
-databaseChangeLog:
-  - property:
-      name: now
-      value: CURRENT_TIMESTAMP
-      dbms: mysql
-
-  - changeSet:
-      id: 1_Book_Table
-      author: Bhaa
-      changes:
-        - createTable:
-            tableName: Book
-            columns:
-              - column:
-                  name: id
-                  type: bigint(20)
-                  autoIncrement: true
-                  startWith: 0
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: name
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: writer_name
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-
-
-        - sql:
-            dbms: mysql
-            sql: ALTER TABLE Book CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci
+#databaseChangeLog:
+#  - property:
+#      name: now
+#      value: CURRENT_TIMESTAMP
+#      dbms: mysql
+#
+#  - changeSet:
+#      id: 1_Book_Table
+#      author: Bhaa
+#      changes:
+#        - createTable:
+#            tableName: Book
+#            columns:
+#              - column:
+#                  name: id
+#                  type: bigint(20)
+#                  autoIncrement: true
+#                  startWith: 0
+#                  constraints:
+#                    primaryKey: true
+#                    nullable: false
+#              - column:
+#                  name: name
+#                  type: varchar(255)
+#                  constraints:
+#                    nullable: false
+#              - column:
+#                  name: writer_name
+#                  type: varchar(255)
+#                  constraints:
+#                    nullable: false
+#
+#
+#        - sql:
+#            dbms: mysql
+#            sql: ALTER TABLE Book CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci

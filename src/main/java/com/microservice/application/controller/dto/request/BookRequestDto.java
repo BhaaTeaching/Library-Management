@@ -5,10 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BookDto {
+public class BookRequestDto {
 
     private String name;
     private String writerName;
     private Integer copies;
     private String location;
+    private String subject;
+    private Integer existingCopies;
+
 }
