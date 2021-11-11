@@ -8,7 +8,7 @@ import lombok.Setter;
 public class BookRequestDto {
 
     private String name;
-    private String writerName;
+    private String author;
     private Integer copies;
     private String location;
     private String subject;

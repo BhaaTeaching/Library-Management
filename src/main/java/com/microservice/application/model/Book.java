@@ -35,7 +35,7 @@ public class Book {
 
     public Book(BookRequestDto bookRequestDto) {
         this.name = bookRequestDto.getName();
-        this.author = bookRequestDto.getWriterName();
+        this.author = bookRequestDto.getAuthor();
         this.copies = bookRequestDto.getCopies();
         this.location = bookRequestDto.getLocation();
         this.subject = bookRequestDto.getSubject();
