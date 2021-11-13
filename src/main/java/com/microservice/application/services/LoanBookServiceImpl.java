@@ -32,13 +32,16 @@ public class LoanBookServiceImpl implements LoanBookService {
     public Loan loan(Long bookId, Long userId) throws NotFoundException, ValidationException {
         Book book = getObjectsService.getBookById(bookId);
         User user = getObjectsService.getUserById(userId);
+        int currenCopies = book.getExistingCopies();
+        if (currenCopies == 0) {
+            throw new ValidationException("No book to loan, try to order it.");
+        }
         //TODO: check status of the reader
+        book.setExistingCopies(--currenCopies);
+        Book savedBook = bookRepository.save(book);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.WEEK_OF_MONTH, 2);
-        Loan loan = new Loan(user, new Date(), new Date(calendar.getTimeInMillis()));
-        int currenCopies = book.getExistingCopies();
-        book.setExistingCopies(--currenCopies);
-        bookRepository.save(book);
+        Loan loan = new Loan(user, savedBook, new Date(), new Date(calendar.getTimeInMillis()));
         return loanRepository.save(loan);
 
     }

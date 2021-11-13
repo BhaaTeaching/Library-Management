@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 @RestController
 public class BookController extends BaseController {
@@ -25,6 +28,11 @@ public class BookController extends BaseController {
     @PostMapping("/add-book")
     public ResponseEntity<Object> addBook(@RequestBody BookRequestDto bookRequestDto) {
         return responseEntity(bookService.addBook(bookRequestDto));
+    }
+
+    @GetMapping("/get-books")
+    public ResponseEntity<Object> getBooks() throws NotFoundException {
+        return responseEntity(bookService.getAllBooks());
     }
 
     @GetMapping("/get-book/{bookId}")
@@ -50,6 +58,11 @@ public class BookController extends BaseController {
     @PutMapping("edit-book/{bookId}")
     public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws NotFoundException {
         return responseEntity(bookService.editBook(bookId, bookRequestDto));
+    }
+
+    @PostMapping("/add-table-of-content")
+    public ResponseEntity<Object> addTableOfContent(@RequestBody InputStream tableOfContentFile) {
+        return responseEntity(bookService.addTableOfContentFile(tableOfContentFile));
     }
 
     @DeleteMapping("remove-book/{bookId}")
