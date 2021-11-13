@@ -4,27 +4,42 @@ import com.microservice.application.controller.dto.request.BookRequestDto;
 import com.microservice.application.controller.dto.response.BookResponseDto;
 import com.microservice.application.model.Book;
 import com.microservice.application.repositories.BookRepository;
+import com.microservice.application.repositories.LoanRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
 
-    BookRepository bookRepository;
+    private final BookRepository bookRepository;
+    private final LoanRepository loanRepository;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, LoanRepository loanRepository) {
         this.bookRepository = bookRepository;
+        this.loanRepository = loanRepository;
     }
 
     @Override
     public Book addBook(BookRequestDto bookRequestDto) {
         Book book = new Book(bookRequestDto);
         return bookRepository.save(book);
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        return ((List<Book>) bookRepository.findAll()).stream()
+                .peek(book -> book.setNearestDateToReturn(loanRepository.findTopWithBookId(book.getId())))
+                .collect(Collectors.toList());
+//        return null;
     }
 
     @Override
@@ -66,6 +81,14 @@ public class BookServiceImpl implements BookService {
         BeanUtils.copyProperties(bookRequestDto, book);
         bookRepository.save(book);
         return book;
+    }
+
+    @Override
+    public String addTableOfContentFile(InputStream tableOfContentFile) {
+//        String fileName = StringUtils.cleanPath(Objects.requireNonNull(tableOfContentFile.getOriginalFilename()));
+
+
+        return "Saving file succeed";
     }
 
     @Override

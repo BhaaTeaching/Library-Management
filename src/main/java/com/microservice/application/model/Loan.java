@@ -34,8 +34,9 @@ public class Loan {
     @Column
     private Date returnBook;
 
-    public Loan(User user, Date loanBook, Date returnBook) {
+    public Loan(User user, Book book, Date loanBook, Date returnBook) {
         this.user = user;
+        this.book = book;
         this.loanBook = loanBook;
         this.returnBook = returnBook;
     }
