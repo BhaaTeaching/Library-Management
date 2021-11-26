@@ -5,4 +5,5 @@ import com.microservice.application.model.User;
 
 public interface UserService {
     User addUser(UserRequestDto userRequestDto);
+    String getPhoneNumber(User user);
 }

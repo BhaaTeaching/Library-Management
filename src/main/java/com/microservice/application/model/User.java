@@ -20,7 +20,9 @@ public class User {
     @Column
     private String name;
     @Column
-    private Long phone;
+    private String phone;
+    @Column(columnDefinition="varchar(255) default '+972'")
+    private String countryCallingCode;
     @Column
     private String email;
 

@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserService {
         User user = new User(userRequestDto);
         return userRepository.save(user);
     }
+
+    @Override
+    public String getPhoneNumber(User user) {
+        return user.getCountryCallingCode() + user.getPhone();
+    }
 }

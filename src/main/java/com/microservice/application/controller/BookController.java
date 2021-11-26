@@ -1,7 +1,7 @@
 package com.microservice.application.controller;
 
 import com.microservice.application.controller.dto.request.BookRequestDto;
-import com.microservice.application.services.BookService;
+import com.microservice.application.services.books.BookService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 

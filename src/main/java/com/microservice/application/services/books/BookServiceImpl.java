@@ -1,4 +1,4 @@
-package com.microservice.application.services;
+package com.microservice.application.services.books;
 
 import com.microservice.application.controller.dto.request.BookRequestDto;
 import com.microservice.application.controller.dto.response.BookResponseDto;
@@ -8,12 +8,9 @@ import com.microservice.application.repositories.LoanRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

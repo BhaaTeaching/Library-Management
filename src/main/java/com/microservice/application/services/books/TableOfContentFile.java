@@ -1,8 +1,7 @@
-package com.microservice.application.services;
+package com.microservice.application.services.books;
 
 import com.microservice.application.model.Book;
 import com.microservice.application.model.DatabaseFile;
-import com.microservice.application.repositories.BookRepository;
 import com.microservice.application.repositories.FileRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
