@@ -26,6 +26,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+	implementation group: "com.twilio.sdk", name: "twilio", version: "8.22.0"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

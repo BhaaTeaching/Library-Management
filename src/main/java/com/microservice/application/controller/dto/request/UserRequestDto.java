@@ -8,6 +8,6 @@ import lombok.Setter;
 public class UserRequestDto {
     private Long id;
     private String name;
-    private Long phone;
+    private String phone;
     private String email;
 }

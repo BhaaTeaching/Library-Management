@@ -1,7 +1,7 @@
 package com.microservice.application.controller;
 
 import com.microservice.application.exception.ValidationException;
-import com.microservice.application.services.LoanBookService;
+import com.microservice.application.services.books.LoanBookService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

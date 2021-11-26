@@ -21,3 +21,7 @@ spring:
 #  liquibase:
 #    enabled: true
 #    change-log: classpath:/liquibase/changelog-master.yaml
+twilio:
+  account_sid: ACa14b3aba2cff43667e4f92f7e64319d3
+  auth_token: 0c2d2cdae54773fb167519fb58b2aa5d
+  trial_number: +19123784027

@@ -1,4 +1,4 @@
-package com.microservice.application.services;
+package com.microservice.application.services.books;
 
 import com.microservice.application.exception.ValidationException;
 import com.microservice.application.model.Book;
@@ -24,6 +24,7 @@ public class ReturnBookServiceImpl implements ReturnBookService {
         }
         book.setExistingCopies(book.getExistingCopies() + 1);
         bookRepository.save(book);
+        //TODO: Send email to user who order this book
         return "Book returned successfully";
     }
 }
