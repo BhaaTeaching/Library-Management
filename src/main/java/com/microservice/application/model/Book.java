@@ -1,13 +1,10 @@
 package com.microservice.application.model;
 
-import com.microservice.application.controller.dto.request.BookRequestDto;
+import com.microservice.application.controller.dto.BookDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import java.io.File;
 import java.util.Date;
 
 @Getter
@@ -41,17 +37,20 @@ public class Book {
     @Column
     private String location;
     private Date nearestDateToReturn;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private DatabaseFile databaseFile;
 //
 //    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
 //    private DatabaseFile databaseFile;
 
-    public Book(BookRequestDto bookRequestDto) {
-        this.name = bookRequestDto.getName();
-        this.author = bookRequestDto.getAuthor();
-        this.copies = bookRequestDto.getCopies();
-        this.location = bookRequestDto.getLocation();
-        this.subject = bookRequestDto.getSubject();
-        this.existingCopies = bookRequestDto.getExistingCopies();
+    public Book(BookDto bookDto) {
+        this.name = bookDto.getName();
+        this.author = bookDto.getAuthor();
+        this.copies = bookDto.getCopies();
+        this.location = bookDto.getLocation();
+        this.subject = bookDto.getSubject();
+        this.existingCopies = bookDto.getExistingCopies();
     }
 }

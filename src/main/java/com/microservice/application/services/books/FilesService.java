@@ -1,5 +1,6 @@
 package com.microservice.application.services.books;
 
+import com.microservice.application.exception.ValidationException;
 import com.microservice.application.model.DatabaseFile;
 import javassist.NotFoundException;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface FilesService {
     DatabaseFile saveFile(MultipartFile file, Long bookId) throws NotFoundException, IOException;
 
-    DatabaseFile getFileByBookId(Long fileId);
+    DatabaseFile getFileByBookId(Long fileId) throws ValidationException;
 
     List<DatabaseFile> getFiles();
 

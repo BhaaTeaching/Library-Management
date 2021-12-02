@@ -1,6 +1,6 @@
 package com.microservice.application.controller;
 
-import com.microservice.application.controller.dto.request.BookRequestDto;
+import com.microservice.application.controller.dto.BookDto;
 import com.microservice.application.services.books.BookService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +23,9 @@ public class BookController extends BaseController {
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
-
     @PostMapping("/add-book")
-    public ResponseEntity<Object> addBook(@RequestBody BookRequestDto bookRequestDto) {
-        return responseEntity(bookService.addBook(bookRequestDto));
+    public ResponseEntity<Object> addBook(@RequestBody BookDto bookDto) {
+        return responseEntity(bookService.addBook(bookDto));
     }
 
     @GetMapping("/get-books")
@@ -55,8 +54,8 @@ public class BookController extends BaseController {
     }
 
     @PutMapping("edit-book/{bookId}")
-    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws NotFoundException {
-        return responseEntity(bookService.editBook(bookId, bookRequestDto));
+    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookDto bookDto) throws NotFoundException {
+        return responseEntity(bookService.editBook(bookId, bookDto));
     }
 
     @PostMapping("/add-table-of-content")

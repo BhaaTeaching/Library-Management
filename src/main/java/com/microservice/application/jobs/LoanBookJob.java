@@ -30,7 +30,7 @@ public class LoanBookJob {
         List<Loan> loans = loanRepository.findByReturnBookLessThan(new Date(calendar.getTimeInMillis()));
         loans.forEach(loan -> {
             SmsRequest smsRequest = new SmsRequest(userService.getPhoneNumber(loan.getUser()), "Please return book tomorrow.");
-            twilioSmsSender.sendSms(smsRequest);
+//            twilioSmsSender.sendSms(smsRequest);
         });
     }
 }

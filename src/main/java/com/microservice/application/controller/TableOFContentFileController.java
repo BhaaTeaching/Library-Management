@@ -1,10 +1,12 @@
 package com.microservice.application.controller;
 
+import com.microservice.application.exception.ValidationException;
 import com.microservice.application.model.DatabaseFile;
 import com.microservice.application.services.books.FilesService;
 import javassist.NotFoundException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -39,9 +41,9 @@ public class TableOFContentFileController extends BaseController{
           return responseEntity(filesService.saveFile(tableOfContent, bookId));
     }
     @GetMapping("/download-table-of-content/{bookId}")
-    public ResponseEntity<Object> downloadTableOfContentFile(@PathVariable Long bookId){
+    public ResponseEntity<Object> downloadTableOfContentFile(@PathVariable Long bookId) throws ValidationException {
         DatabaseFile doc = filesService.getFileByBookId(bookId);
-        return ResponseEntity.ok()
+        return /*doc == null  ? new ResponseEntity<>("Table of content does not exist - book id: " + bookId, HttpStatus.NOT_FOUND) :*/ ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(doc.getDocType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment:filename=\""+doc.getDocName()+"\"")
                 .body(new ByteArrayResource(doc.getData()));

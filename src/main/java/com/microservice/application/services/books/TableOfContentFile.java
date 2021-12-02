@@ -1,5 +1,6 @@
 package com.microservice.application.services.books;
 
+import com.microservice.application.exception.ValidationException;
 import com.microservice.application.model.Book;
 import com.microservice.application.model.DatabaseFile;
 import com.microservice.application.repositories.FileRepository;
@@ -31,8 +32,12 @@ public class TableOfContentFile implements FilesService {
     }
 
     @Override
-    public DatabaseFile getFileByBookId(Long fileId) {
-        return fileRepository.findByBookId(fileId);
+    public DatabaseFile getFileByBookId(Long fileId) throws ValidationException {
+        DatabaseFile databaseFile = fileRepository.findByBookId(fileId);
+        if (databaseFile == null) {
+            throw new ValidationException("No file exist");
+        }
+        return databaseFile;
     }
 
     @Override

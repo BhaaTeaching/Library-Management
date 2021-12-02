@@ -1,7 +1,6 @@
 package com.microservice.application.services.books;
 
-import com.microservice.application.controller.dto.request.BookRequestDto;
-import com.microservice.application.controller.dto.response.BookResponseDto;
+import com.microservice.application.controller.dto.BookDto;
 import com.microservice.application.model.Book;
 import com.microservice.application.repositories.BookRepository;
 import com.microservice.application.repositories.LoanRepository;
@@ -26,56 +25,55 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBook(BookRequestDto bookRequestDto) {
-        Book book = new Book(bookRequestDto);
+    public Book addBook(BookDto bookDto) {
+        Book book = new Book(bookDto);
         return bookRepository.save(book);
     }
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<BookDto> getAllBooks() {
         return ((List<Book>) bookRepository.findAll()).stream()
-                .peek(book -> book.setNearestDateToReturn(loanRepository.findTopWithBookId(book.getId())))
+                .peek(book -> book.setNearestDateToReturn(loanRepository.findTopWithBookId(book.getId()))).map(BookDto::new)
                 .collect(Collectors.toList());
-//        return null;
     }
 
     @Override
-    public BookResponseDto getBookById(Long bookId) throws NotFoundException {
+    public BookDto getBookById(Long bookId) throws NotFoundException {
         Book book = searchBookById(bookId);
-        return new BookResponseDto(book);
+        return new BookDto(book);
     }
 
     @Override
-    public List<BookResponseDto> getBookByName(String name) throws NotFoundException {
+    public List<BookDto> getBookByName(String name) throws NotFoundException {
         List<Book> books = bookRepository.findByName(name);
         if (books.isEmpty()) {
             throw new NotFoundException("The book: " + name + " doesn't exist, please check the Id");
         }
-        return books.stream().map(BookResponseDto::new).collect(Collectors.toList());
+        return books.stream().map(BookDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDto> getBookByAuthor(String authorName) throws NotFoundException {
+    public List<BookDto> getBookByAuthor(String authorName) throws NotFoundException {
         List<Book> books = bookRepository.findByAuthor(authorName);
         if (books.isEmpty()) {
             throw new NotFoundException("Book with author name: " + authorName + " doesn't exist, please check the Id");
         }
-        return books.stream().map(BookResponseDto::new).collect(Collectors.toList());
+        return books.stream().map(BookDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDto> getBookBySubject(String subject) throws NotFoundException {
+    public List<BookDto> getBookBySubject(String subject) throws NotFoundException {
         List<Book> books = bookRepository.findBySubject(subject);
         if (books.isEmpty()) {
             throw new NotFoundException("book with subject: " + subject + " doesn't exist, please check the Id");
         }
-        return books.stream().map(BookResponseDto::new).collect(Collectors.toList());
+        return books.stream().map(BookDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public Book editBook(Long bookId, BookRequestDto bookRequestDto) throws NotFoundException {
+    public Book editBook(Long bookId, BookDto bookDto) throws NotFoundException {
         Book book = searchBookById(bookId);
-        BeanUtils.copyProperties(bookRequestDto, book);
+        BeanUtils.copyProperties(bookDto, book);
         bookRepository.save(book);
         return book;
     }
