@@ -1,64 +1,44 @@
 import {useEffect, useState} from "react";
-import {get} from "../../RestApiCalls/GetRequest";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Dateformat from "dateformat";
-import VerifiedIcon from '@mui/icons-material/Verified';
-import styled from "styled-components";
-import {Button, colors} from "@mui/material";
-import Snackbar from '@mui/material/Snackbar';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import './GetAllBooks.css'
+import BootstrapTable from 'react-bootstrap-table-next';
+import styled from "styled-components";
+import {get} from "../../RestApiCalls/GetRequest";
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
+import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.css';
+import VerifiedIcon from "@mui/icons-material/Verified";
+import {Button, colors, IconButton, Snackbar} from "@material-ui/core";
+import Dateformat from 'dateformat';
+import CloseIcon from '@mui/icons-material/Close';
+import {useNavigate} from "react-router-dom";
+// import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const GetAllBooks = ({editCallback}) => {
-    const [books, setBooks] = useState();
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [books, setBooks] = useState("");
     const [isBlob, setIsBlob] = useState(true);
     const [noFileExist, setNoFileExist] = useState('');
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    let navigate = useNavigate();
 
     useEffect(() => {
         debugger
         console.log("editCallback", editCallback);
         get("/get-books").then(response => {
+            debugger;
             if (response.ok) {
                 debugger;
                 response.json().then(json => {
-                    setBooks(json);
+                    setBooks(JSON.parse(JSON.stringify(json)));
                 });
             }
         });
     }, []);
 
-    const bookIdFormatter = ({cell, row}) => {
-        return (
-            <>
-                <HiddenId>{cell}</HiddenId>
-            </>
-        );
-    };
-
     const bookNameFormatter = (cell, row) => {
         return (
             <div>
-                {console.log("cell ", cell)}
-                {console.log("row ", row)}
-            <Button onClick={editCallback}>{cell}</Button>
+                <Button variant="text" onClick={() => editCallback(row.id)}>{`${row.name} (${row.id})`}</Button>
             </div>
         );
     };
@@ -84,7 +64,7 @@ const GetAllBooks = ({editCallback}) => {
         );
     };
 
-    const downloadTableOfContentFormatter = cell => {
+    const downloadTableOfContentFormatter = (cell, row) => {
         const downloadTableOfContent = (s) => {
             console.log("s", s)
             get("/download-table-of-content/" + s).then(response => {
@@ -110,58 +90,43 @@ const GetAllBooks = ({editCallback}) => {
 
         return (
             <>
-                <Button onClick={() => downloadTableOfContent(cell)} variant="text">Download Table Of Content</Button>
+                <Button onClick={() => downloadTableOfContent(row.id)} variant="text">Download Table Of Content</Button>
             </>
         );
     };
 
-    const columns = [
+    const columns = [{
+        dataField: 'id',
+        hidden: true,
+    }, {
+        dataField: 'name',
+        text: 'Book Name',
+        formatter: bookNameFormatter
+    }, {
+        dataField: 'subject',
+        text: 'Subject'
+    }, {
+        dataField: 'author',
+        text: 'Author'
+    }, {
+        dataField: 'existingCopies',
+        text: 'Existing Copies'
+    }, {
+        dataField: 'nearestDateToReturn',
+        text: 'Nearest Date To Return',
+        formatter: dateFormatter,
+    }, {
+        dataField: 'isAvailable',
+        text: 'Loan Availability',
+        formatter: availableFormatter,
+    },
         {
-            id: 'name',
-            label: 'Name',
-            minWidth: 170,
-            format: bookNameFormatter,
-        },
-        {
-            id: 'subject',
-            label: 'Subject',
-            minWidth: 170,
-            align: 'center',
-        },
-        {
-            id: 'author',
-            label: 'Author',
-            minWidth: 100,
-            align: 'center',
-        },
-        {
-            id: 'existingCopies',
-            label: 'Existing Copies',
-            minWidth: 170,
-            align: 'center',
-        },
-        {
-            id: 'nearestDateToReturn',
-            label: 'Nearest Date To Return',
-            minWidth: 170,
-            align: 'center',
-            format: dateFormatter,
-        },
-        {
-            id: 'isAvailable',
-            label: 'Loan Availability',
-            minWidth: 170,
-            align: 'center',
-            format: availableFormatter,
-        },
-        {
-            id: 'id',
-            label: 'Download Table Of Content',
-            minWidth: 170,
-            align: 'left',
-            format: downloadTableOfContentFormatter,
+            dataField: 'id',
+            text: 'Download Table Of Content',
+            formatter: downloadTableOfContentFormatter,
         }
-    ]
+    ];
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -193,51 +158,19 @@ const GetAllBooks = ({editCallback}) => {
                 message={noFileExist}
                 action={action}
             />}
-            <TableContainerStyle sx={{maxHeight: 440}}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{minWidth: column.minWidth}}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {books?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format
-                                                        ? column.format(value)
-                                                        : value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainerStyle>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={books?.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            <AddBookButton>
+                <Button onClick={() => navigate("/addBook")} variant="outlined">Add</Button>
+            </AddBookButton>
+            {/*<ToolkitProvider*/}
+            {/*    keyField="id"*/}
+            {/*    data={ books }*/}
+            {/*    columns={ columns }*/}
+            {/*    search*/}
+            {/*>*/}
+            {/*    <Search/>*/}
+            {/*</ToolkitProvider>*/}
+            <TableContainerStyle bootstrap4 keyField='id' data={books} columns={columns}
+                                 pagination={paginationFactory()}/>
         </div>
     )
 };
@@ -256,10 +189,12 @@ const NotAvailableLoan = styled(VerifiedIcon)`
 color: ${theme => colors.red[700]};
 `;
 
-const HiddenId = styled.div`
-    display: none;
+const TableContainerStyle = styled(BootstrapTable)`
+     max-height: 100%;
 `;
 
-const TableContainerStyle = styled.div`
-     max-height: 100%;
+const AddBookButton = styled.div`
+    float:right;
+    margin: 0 0.5rem 0.5rem 0;
+
 `;

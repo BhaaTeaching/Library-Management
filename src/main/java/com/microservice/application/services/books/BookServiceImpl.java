@@ -73,6 +73,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book editBook(Long bookId, BookDto bookDto) throws NotFoundException {
         Book book = searchBookById(bookId);
+        bookDto.setId(bookId);
         BeanUtils.copyProperties(bookDto, book);
         bookRepository.save(book);
         return book;

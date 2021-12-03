@@ -8,13 +8,20 @@ import 'cors';
 import {post} from "../../RestApiCalls/PostRequest";
 import {get} from "../../RestApiCalls/GetRequest";
 import VerifiedIcon from '@mui/icons-material/Verified';
+import {useNavigate, useParams} from "react-router-dom";
+import {put} from "../../RestApiCalls/PutRequest";
 
-const AddBook = () => {
+
+const AddEditBook = () => {
     const [book, setBook] = useState();
+    const [isEdit, setIsEdit] = useState();
+    const {bookId} = useParams();
+    let navigate = useNavigate();
 
     const onSubmit = async (values) => {
         console.log("values", values);
-        await post('/add-book', values);
+        isEdit ? await put(`/edit-book/${bookId}`, values) : await post('/add-book', values);
+        navigate("/")
     }
 
     const validate = (values) => {
@@ -24,7 +31,9 @@ const AddBook = () => {
 
     useEffect(() => {
         console.log("something changed");
-        get('/get-book/2').then(response => {
+        const isEditTest = window.location.pathname.includes("editBook");
+        setIsEdit(isEditTest);
+        get(`/get-book/${bookId}`).then(response => {
             if (response.ok) {
                 response.json().then(json => {
                     console.log(json);
@@ -54,7 +63,8 @@ const AddBook = () => {
                                    name={"bookSubject"} defaultValue={book?.subject}/>
                             <FieldMargin/>
                             <Field id={"numberOfCopies"} label={"Copies"} variant={"outlined"}
-                                   component={TextField} name={"numberOfCopies"} type={"number"} defaultValue={book?.copies}/>
+                                   component={TextField} name={"numberOfCopies"} type={"number"}
+                                   defaultValue={book?.copies}/>
                             <FieldMargin/>
                             <Field id={"bookLocation"} label={"Location"} variant={"outlined"}
                                    component={TextField} name={"bookLocation"} defaultValue={book?.location}/>
@@ -70,7 +80,7 @@ const AddBook = () => {
 
 };
 
-export default AddBook;
+export default AddEditBook;
 
 const FieldMargin = styled.div`
 margin-top:1rem

@@ -33,7 +33,7 @@ public class BookDto {
         this.copies = book.getCopies();
         this.subject = book.getSubject();
         this.existingCopies = book.getExistingCopies();
-        this.isAvailable = book.getExistingCopies() > 0;
+        this.isAvailable = book.getExistingCopies() != null && book.getExistingCopies() > 0;
         this.location = book.getLocation();
         this.nearestDateToReturn = book.getNearestDateToReturn();
         this.databaseFile = book.getDatabaseFile();
