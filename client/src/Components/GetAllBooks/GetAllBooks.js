@@ -13,7 +13,10 @@ import {Button, colors, IconButton, Snackbar} from "@material-ui/core";
 import Dateformat from 'dateformat';
 import CloseIcon from '@mui/icons-material/Close';
 import {useNavigate} from "react-router-dom";
+import {post} from "../../RestApiCalls/PostRequest";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 // import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import 'react-notifications/lib/notifications.css';
 
 const GetAllBooks = ({editCallback}) => {
     const [books, setBooks] = useState("");
@@ -95,6 +98,53 @@ const GetAllBooks = ({editCallback}) => {
         );
     };
 
+    const loanBookFormatter = (cell, row) => {
+        const loanBook = () => {
+            post(`/loan-book?bookId=${row.id}&userId=206052933`).then(response => {
+                if (response.ok) {
+                    get("/get-books").then(response => {
+                        if (response.ok) {
+                            response.json().then(json => {
+                                setBooks(JSON.parse(JSON.stringify(json)));
+                            });
+                        }
+                    });
+                    response.json().then(json => {
+                        NotificationManager.success(`Book: ${json.book.name} was ordered for user: ${json.user.name}`, 'Loan Succeed');
+                    });
+                } else {
+                    response.clone().json().then(json => {
+                        NotificationManager.error(json.message, 'Loan Failed');
+                    });
+                }
+            })
+        }
+
+        const orderBook = () => {
+            post(`/order-book?bookId=${row.id}&userId=206052933`).then(response => {
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log("order", json);
+                        NotificationManager.success(`Book: ${json.book.name} was ordered for user: ${json.user.name}`, 'Order Succeed');
+
+                    });
+                } else {
+                    response.clone().json().then(json => {
+                        debugger
+                        NotificationManager.error(json.message, 'Order Failed');
+                    });
+                }
+            });
+        }
+
+        return (
+            <div>
+                {row?.isAvailable ?
+                    <Button onClick={loanBook}>Loan</Button> : <Button onClick={orderBook}>Order</Button>}
+            </div>
+        );
+    };
+
     const columns = [{
         dataField: 'id',
         hidden: true,
@@ -124,6 +174,11 @@ const GetAllBooks = ({editCallback}) => {
             dataField: 'id',
             text: 'Download Table Of Content',
             formatter: downloadTableOfContentFormatter,
+        },
+        {
+            dataField: 'loanBook',
+            text: 'Loan Book',
+            formatter: loanBookFormatter,
         }
     ];
 
@@ -171,6 +226,7 @@ const GetAllBooks = ({editCallback}) => {
             {/*</ToolkitProvider>*/}
             <TableContainerStyle bootstrap4 keyField='id' data={books} columns={columns}
                                  pagination={paginationFactory()}/>
+            <NotificationContainer/>
         </div>
     )
 };

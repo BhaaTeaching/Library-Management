@@ -2,7 +2,7 @@ import {buildBookRequestDto} from "../Components/AddBook/BuildDto";
 import {serverUrl} from "../Utils/Constant";
 
 export const post = async (path, values) => {
-    await fetch(serverUrl + path, {
+     return await fetch(serverUrl + path, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
