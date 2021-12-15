@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Box, Paper, TextField} from "@mui/material";
 import {get} from "../../RestApiCalls/GetRequest";
 import styled from "styled-components";
+import './UserInfo.css';
 
 const UserInfo = ({userId}) => {
     const [user, setUser] = useState();
@@ -10,7 +11,6 @@ const UserInfo = ({userId}) => {
     useEffect(() => {
         if (textRef.current)
             textRef.current.focus();
-        console.log("textRef.current", textRef.current);
         get(`/get-user/${userId}`).then(response => {
             if (response.ok) {
                 response.json().then(json => {
@@ -33,13 +33,13 @@ const UserInfo = ({userId}) => {
                     display: 'flex',
                     flexWrap: 'wrap',
                     '& > :not(style)': {
-                        m: 1,
-                        width: 1500,
+                        m: 2,
+                        width: 1600,
                         height: 500,
                     },
                 }}
-            >
-                <Paper elevation={3}>
+                children={
+                    <Paper elevation={3}>
                     <TextFieldStyle>
                         <TextFieldReference
                             id="outlined-read-only-input"
@@ -64,7 +64,7 @@ const UserInfo = ({userId}) => {
                         />
                     </TextFieldStyle>
                     <TextFieldStyle>
-
+                        {console.log("user?.countryCallingCode", user?.countryCallingCode)}
                         <TextFieldReference
                             id="outlined-read-only-input"
                             label={"User Phone"}
@@ -86,9 +86,11 @@ const UserInfo = ({userId}) => {
                             inputRef={textRef}
                         />
                     </TextFieldStyle>
-
                 </Paper>
-            </Box>
+                }
+            />
+               
+            {/* </Box> */}
         </div>
     );
 
@@ -99,4 +101,8 @@ export default UserInfo;
 
 const TextFieldStyle = styled.div`
     margin-top: 1.5rem;
+`;
+
+const Wrapper = styled.div`
+    width: -webkit-fill-available;
 `;

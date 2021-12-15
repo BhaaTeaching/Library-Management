@@ -5,22 +5,35 @@ import './AddBook.css'
 import {Field, Form} from 'react-final-form';
 import styled from "styled-components";
 import 'cors';
-import {post} from "../../RestApiCalls/PostRequest";
+import {post, uploadTableOfContent} from "../../RestApiCalls/PostRequest";
 import {get} from "../../RestApiCalls/GetRequest";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import {useNavigate, useParams} from "react-router-dom";
 import {put} from "../../RestApiCalls/PutRequest";
-
+import {FileUploaderDropContainer} from "carbon-components-react";
+import 'carbon-components/css/carbon-components.min.css';
+import {buildBookRequestDto} from "./BuildDto";
 
 const AddEditBook = () => {
     const [book, setBook] = useState();
     const [isEdit, setIsEdit] = useState();
+    const [tableOfContentFile,setTableOfContentFile] = useState();
+
     const {bookId} = useParams();
     let navigate = useNavigate();
 
     const onSubmit = async (values) => {
         console.log("values", values);
-        isEdit ? await put(`/edit-book/${bookId}`, values) : await post('/add-book', values);
+        const response = isEdit ? await put(`/edit-book/${bookId}`, values) : await post('/add-book', buildBookRequestDto(values));
+        debugger;
+        if (response?.ok) {
+            response.json().then(json => {
+                console.log(json);
+                setBook(json);
+            });
+        }
+        debugger;
+        isEdit ? await uploadTableOfContent(`/edit-table-of-content/${bookId}`,tableOfContentFile) : await uploadTableOfContent(`/upload-table-of-content/${book?.id}`,tableOfContentFile);
         navigate("/")
     }
 
@@ -42,6 +55,13 @@ const AddEditBook = () => {
             }
         });
     }, []);
+
+    const handleFileUpload = (file) => {
+        console.log("file", file);
+        console.log("file.target.files", file.target.files[0]);
+        setTableOfContentFile(file.target.files[0]);
+        debugger;
+    }
 
     return (
         <div>
@@ -68,7 +88,7 @@ const AddEditBook = () => {
                             <FieldMargin/>
                             <Field id={"bookLocation"} label={"Location"} variant={"outlined"}
                                    component={TextField} name={"bookLocation"} defaultValue={book?.location}/>
-
+                            <FileUploaderDropContainer id={'tableOfContentUploader'} accept={['.pdf']} labelText={'Upload Table Of Content'} onAddFiles={handleFileUpload}/>
                             <Button variant="contained" type={"submit"}>Save</Button>
 
                         </Paper>

@@ -6,13 +6,14 @@ import com.microservice.application.services.books.FilesService;
 import javassist.NotFoundException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,8 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-public class TableOFContentFileController extends BaseController{
+@CrossOrigin(origins = "*")
+public class TableOFContentFileController extends BaseController {
     private final FilesService filesService;
 
 
@@ -38,14 +40,20 @@ public class TableOFContentFileController extends BaseController{
 
     @PostMapping("/upload-table-of-content/{bookId}")
     public ResponseEntity<Object> uploadMultipleFiles(@RequestBody MultipartFile tableOfContent, @PathVariable Long bookId) throws NotFoundException, IOException {
-          return responseEntity(filesService.saveFile(tableOfContent, bookId));
+        return responseEntity(filesService.saveFile(tableOfContent, bookId));
     }
+
+    @PutMapping("/edit-table-of-content/{bookId}")
+    public ResponseEntity<Object> editTableOfContent(@RequestBody MultipartFile tableOfContent, @PathVariable Long bookId) throws NotFoundException, IOException, ValidationException {
+        return responseEntity(filesService.editFile(tableOfContent, bookId));
+    }
+
     @GetMapping("/download-table-of-content/{bookId}")
     public ResponseEntity<Object> downloadTableOfContentFile(@PathVariable Long bookId) throws ValidationException {
         DatabaseFile doc = filesService.getFileByBookId(bookId);
-        return /*doc == null  ? new ResponseEntity<>("Table of content does not exist - book id: " + bookId, HttpStatus.NOT_FOUND) :*/ ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(doc.getDocType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment:filename=\""+doc.getDocName()+"\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=\"" + doc.getDocName() + "\"")
                 .body(new ByteArrayResource(doc.getData()));
     }
 }

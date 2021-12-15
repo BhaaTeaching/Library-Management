@@ -11,6 +11,8 @@ import java.util.List;
 public interface FilesService {
     DatabaseFile saveFile(MultipartFile file, Long bookId) throws NotFoundException, IOException;
 
+    DatabaseFile editFile(MultipartFile file, Long bookId) throws NotFoundException, IOException, ValidationException;
+
     DatabaseFile getFileByBookId(Long fileId) throws ValidationException;
 
     List<DatabaseFile> getFiles();

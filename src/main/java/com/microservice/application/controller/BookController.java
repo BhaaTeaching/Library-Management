@@ -4,6 +4,7 @@ import com.microservice.application.controller.dto.BookDto;
 import com.microservice.application.services.books.BookService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.InputStream;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class BookController extends BaseController {
 
     private final BookService bookService;

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import './GetAllBooks.css'
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -17,6 +17,9 @@ import {post} from "../../RestApiCalls/PostRequest";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 // import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-notifications/lib/notifications.css';
+import {OverflowMenuItem} from "carbon-components-react";
+import OverflowMenu from "carbon-components-react/lib/components/OverflowMenu/next/OverflowMenu";
+import {remove} from "../../RestApiCalls/DeleteRequest";
 
 const GetAllBooks = ({editCallback}) => {
     const [books, setBooks] = useState("");
@@ -130,7 +133,6 @@ const GetAllBooks = ({editCallback}) => {
                     });
                 } else {
                     response.clone().json().then(json => {
-                        debugger
                         NotificationManager.error(json.message, 'Order Failed');
                     });
                 }
@@ -144,6 +146,49 @@ const GetAllBooks = ({editCallback}) => {
             </div>
         );
     };
+
+    const moreFormatter = (cell, row) => {
+        const Edit = () => {
+            return (
+                <OptionText >{"Edit"}</OptionText>
+            );
+        };
+
+        const Delete = () => {
+            return (
+                <OptionText >{"Remove"}</OptionText>
+            );
+        };
+        const deleteCallback = (bookId) => {
+            console.log(" delete book ", bookId);
+            remove(`/remove-book/${bookId}`).then(response => {
+                console.log("response", response)
+                debugger;
+                if (response.ok) {
+                    get("/get-books").then(response => {
+                        if (response.ok) {
+                            response.json().then(json => {
+                                setBooks(JSON.parse(JSON.stringify(json)));
+                            });
+                        }
+                    });
+                    response.json().then(json => {
+                        debugger;
+                        NotificationManager.success(`Book: ${json?.name} was deleted successfully`, 'Delete Succeed');});
+                } else {
+                    response.clone().json().then(json => NotificationManager.error(json.message, 'Delete Failed'));
+                }
+            });
+            navigate('/')
+        }
+
+        return (
+            <OverflowMenu>
+            <OverflowMenuItem onClick={() => editCallback(row.id)} itemText={<Edit/>}/>
+            <OverflowMenuItem onClick={() => deleteCallback(row.id)} itemText={<Delete/>}/>
+            </OverflowMenu>
+        );
+    }
 
     const columns = [{
         dataField: 'id',
@@ -179,6 +224,10 @@ const GetAllBooks = ({editCallback}) => {
             dataField: 'loanBook',
             text: 'Loan Book',
             formatter: loanBookFormatter,
+        },
+        {
+            dataField: 'more',
+            formatter: moreFormatter,
         }
     ];
 
@@ -252,5 +301,8 @@ const TableContainerStyle = styled(BootstrapTable)`
 const AddBookButton = styled.div`
     float:right;
     margin: 0 0.5rem 0.5rem 0;
+`;
 
+const OptionText = styled.span`
+  margin-inline-start: 0.3125rem;
 `;

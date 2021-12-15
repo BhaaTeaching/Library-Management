@@ -1,0 +1,16 @@
+.css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+    width: 90rem;
+}
+
+.css-3su884-MuiPaper-root {
+    align-items: center;
+}
+
+#outlined-read-only-input-label {
+ font-size: small;
+}
+
+#outlined-read-only-input{
+    text-align: center;
+    font-size: medium;
+}

@@ -1,13 +1,11 @@
 import {serverUrl} from "../Utils/Constant";
-import {buildBookRequestDto} from "../Components/AddBook/BuildDto";
 
-export const put = async (path, values) => {
+export const remove = async (path) => {
     return await fetch(serverUrl + path, {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(buildBookRequestDto(values))
     });
 }

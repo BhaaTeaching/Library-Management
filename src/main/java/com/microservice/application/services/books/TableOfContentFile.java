@@ -32,6 +32,18 @@ public class TableOfContentFile implements FilesService {
     }
 
     @Override
+    public DatabaseFile editFile(MultipartFile file, Long bookId) throws NotFoundException, IOException, ValidationException {
+        DatabaseFile databaseFile = getFileByBookId(bookId);
+        String fileName = file.getOriginalFilename();
+        Book book = getObjectsService.getBookById(bookId);
+        databaseFile.setDocName(fileName);
+        databaseFile.setDocType(file.getContentType());
+        databaseFile.setData(file.getBytes());
+        databaseFile.setBook(book);
+        return fileRepository.save(databaseFile);
+    }
+
+    @Override
     public DatabaseFile getFileByBookId(Long fileId) throws ValidationException {
         DatabaseFile databaseFile = fileRepository.findByBookId(fileId);
         if (databaseFile == null) {
