@@ -17,23 +17,21 @@ import {buildBookRequestDto} from "./BuildDto";
 const AddEditBook = () => {
     const [book, setBook] = useState();
     const [isEdit, setIsEdit] = useState();
-    const [tableOfContentFile,setTableOfContentFile] = useState();
+    const [tableOfContentFile, setTableOfContentFile] = useState();
 
     const {bookId} = useParams();
     let navigate = useNavigate();
 
     const onSubmit = async (values) => {
-        console.log("values", values);
         const response = isEdit ? await put(`/edit-book/${bookId}`, values) : await post('/add-book', buildBookRequestDto(values));
-        debugger;
         if (response?.ok) {
             response.json().then(json => {
-                console.log(json);
                 setBook(json);
             });
         }
-        debugger;
-        isEdit ? await uploadTableOfContent(`/edit-table-of-content/${bookId}`,tableOfContentFile) : await uploadTableOfContent(`/upload-table-of-content/${book?.id}`,tableOfContentFile);
+        if (tableOfContentFile != null || tableOfContentFile !== undefined) {
+            isEdit ? await uploadTableOfContent(`/edit-table-of-content/${bookId}`, tableOfContentFile) : await uploadTableOfContent(`/upload-table-of-content/${book?.id}`, tableOfContentFile);
+        }
         navigate("/")
     }
 
@@ -43,13 +41,11 @@ const AddEditBook = () => {
     }
 
     useEffect(() => {
-        console.log("something changed");
         const isEditTest = window.location.pathname.includes("editBook");
         setIsEdit(isEditTest);
         get(`/get-book/${bookId}`).then(response => {
             if (response.ok) {
                 response.json().then(json => {
-                    console.log(json);
                     setBook(json);
                 });
             }
@@ -57,10 +53,7 @@ const AddEditBook = () => {
     }, []);
 
     const handleFileUpload = (file) => {
-        console.log("file", file);
-        console.log("file.target.files", file.target.files[0]);
         setTableOfContentFile(file.target.files[0]);
-        debugger;
     }
 
     return (
@@ -88,7 +81,9 @@ const AddEditBook = () => {
                             <FieldMargin/>
                             <Field id={"bookLocation"} label={"Location"} variant={"outlined"}
                                    component={TextField} name={"bookLocation"} defaultValue={book?.location}/>
-                            <FileUploaderDropContainer id={'tableOfContentUploader'} accept={['.pdf']} labelText={'Upload Table Of Content'} onAddFiles={handleFileUpload}/>
+                            <FileUploaderDropContainer id={'tableOfContentUploader'} accept={['.pdf']}
+                                                       labelText={'Upload Table Of Content'}
+                                                       onAddFiles={handleFileUpload}/>
                             <Button variant="contained" type={"submit"}>Save</Button>
 
                         </Paper>

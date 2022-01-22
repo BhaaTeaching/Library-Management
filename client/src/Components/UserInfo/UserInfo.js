@@ -5,7 +5,7 @@ import styled from "styled-components";
 import './UserInfo.css';
 
 const UserInfo = ({userId}) => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
     const textRef = useRef();
 
     useEffect(() => {
@@ -14,7 +14,6 @@ const UserInfo = ({userId}) => {
         get(`/get-user/${userId}`).then(response => {
             if (response.ok) {
                 response.json().then(json => {
-                    console.log(json);
                     setUser(json);
                 });
             }
@@ -34,63 +33,59 @@ const UserInfo = ({userId}) => {
                     flexWrap: 'wrap',
                     '& > :not(style)': {
                         m: 2,
-                        width: 1600,
+                        width: 2112,
                         height: 500,
                     },
                 }}
                 children={
                     <Paper elevation={3}>
-                    <TextFieldStyle>
-                        <TextFieldReference
-                            id="outlined-read-only-input"
-                            label={"User Id"}
-                            value={user?.id}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            inputRef={textRef}
-                        />
-                    </TextFieldStyle>
-                    <TextFieldStyle>
-
-                        <TextFieldReference
-                            id="outlined-read-only-input"
-                            label={"User Name"}
-                            value={user?.name}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            inputRef={textRef}
-                        />
-                    </TextFieldStyle>
-                    <TextFieldStyle>
-                        {console.log("user?.countryCallingCode", user?.countryCallingCode)}
-                        <TextFieldReference
-                            id="outlined-read-only-input"
-                            label={"User Phone"}
-                            value={user?.countryCallingCode + '-' + user?.phone}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            inputRef={textRef}
-                        />
-                    </TextFieldStyle>
-                    <TextFieldStyle>
-                        <TextFieldReference
-                            id="outlined-read-only-input"
-                            label={"User Email"}
-                            value={user?.email}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            inputRef={textRef}
-                        />
-                    </TextFieldStyle>
-                </Paper>
+                        <TextFieldStyle>
+                            <TextFieldReference
+                                id="outlined-read-only-input"
+                                label={"User Id"}
+                                value={user?.id}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                inputRef={textRef}
+                            />
+                        </TextFieldStyle>
+                        <TextFieldStyle>
+                            <TextFieldReference
+                                id="outlined-read-only-input"
+                                label={"User Name"}
+                                value={user?.name}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                inputRef={textRef}
+                            />
+                        </TextFieldStyle>
+                        <TextFieldStyle>
+                            <TextFieldReference
+                                id="outlined-read-only-input"
+                                label={"User Phone"}
+                                value={user?.countryCallingCode + '-' + user?.phone}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                inputRef={textRef}
+                            />
+                        </TextFieldStyle>
+                        <TextFieldStyle>
+                            <TextFieldReference
+                                id="outlined-read-only-input"
+                                label={"User Email"}
+                                value={user?.email}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                inputRef={textRef}
+                            />
+                        </TextFieldStyle>
+                    </Paper>
                 }
             />
-               
-            {/* </Box> */}
         </div>
     );
 
@@ -101,8 +96,4 @@ export default UserInfo;
 
 const TextFieldStyle = styled.div`
     margin-top: 1.5rem;
-`;
-
-const Wrapper = styled.div`
-    width: -webkit-fill-available;
 `;

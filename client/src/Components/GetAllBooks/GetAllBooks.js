@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import './GetAllBooks.css'
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -20,22 +20,24 @@ import 'react-notifications/lib/notifications.css';
 import {OverflowMenuItem} from "carbon-components-react";
 import OverflowMenu from "carbon-components-react/lib/components/OverflowMenu/next/OverflowMenu";
 import {remove} from "../../RestApiCalls/DeleteRequest";
+import {useDispatch, useSelector} from "react-redux";
+import {setBooksStore} from "../../Redux/baseActions";
 
 const GetAllBooks = ({editCallback}) => {
     const [books, setBooks] = useState("");
     const [isBlob, setIsBlob] = useState(true);
     const [noFileExist, setNoFileExist] = useState('');
     let navigate = useNavigate();
+    const booksStore = useSelector(state => state.books)
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        debugger
-        console.log("editCallback", editCallback);
         get("/get-books").then(response => {
-            debugger;
             if (response.ok) {
-                debugger;
                 response.json().then(json => {
-                    setBooks(JSON.parse(JSON.stringify(json)));
+                    const booksData = JSON.parse(JSON.stringify(json));
+                    dispatch(setBooksStore(booksData))
+                    setBooks(booksData);
                 });
             }
         });
@@ -72,7 +74,6 @@ const GetAllBooks = ({editCallback}) => {
 
     const downloadTableOfContentFormatter = (cell, row) => {
         const downloadTableOfContent = (s) => {
-            console.log("s", s)
             get("/download-table-of-content/" + s).then(response => {
                 if (response.status === 405) {
                     setIsBlob(false);
@@ -127,7 +128,6 @@ const GetAllBooks = ({editCallback}) => {
             post(`/order-book?bookId=${row.id}&userId=206052933`).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        console.log("order", json);
                         NotificationManager.success(`Book: ${json.book.name} was ordered for user: ${json.user.name}`, 'Order Succeed');
 
                     });
@@ -150,31 +150,25 @@ const GetAllBooks = ({editCallback}) => {
     const moreFormatter = (cell, row) => {
         const Edit = () => {
             return (
-                <OptionText >{"Edit"}</OptionText>
+                <OptionText>{"Edit"}</OptionText>
             );
         };
 
         const Delete = () => {
             return (
-                <OptionText >{"Remove"}</OptionText>
+                <OptionText>{"Remove"}</OptionText>
             );
         };
         const deleteCallback = (bookId) => {
-            console.log(" delete book ", bookId);
             remove(`/remove-book/${bookId}`).then(response => {
-                console.log("response", response)
-                debugger;
                 if (response.ok) {
-                    get("/get-books").then(response => {
-                        if (response.ok) {
-                            response.json().then(json => {
-                                setBooks(JSON.parse(JSON.stringify(json)));
-                            });
-                        }
-                    });
+                    let deepCopy = JSON.parse(JSON.stringify(books));
+                    deepCopy = deepCopy.filter(book => book?.id !== bookId)
+                    dispatch(setBooksStore(deepCopy))
+                    setBooks(deepCopy)
                     response.json().then(json => {
-                        debugger;
-                        NotificationManager.success(`Book: ${json?.name} was deleted successfully`, 'Delete Succeed');});
+                        NotificationManager.success(`Book: ${json?.name} was deleted successfully`, 'Delete Succeed');
+                    });
                 } else {
                     response.clone().json().then(json => NotificationManager.error(json.message, 'Delete Failed'));
                 }
@@ -184,8 +178,8 @@ const GetAllBooks = ({editCallback}) => {
 
         return (
             <OverflowMenu>
-            <OverflowMenuItem onClick={() => editCallback(row.id)} itemText={<Edit/>}/>
-            <OverflowMenuItem onClick={() => deleteCallback(row.id)} itemText={<Delete/>}/>
+                <OverflowMenuItem onClick={() => editCallback(row.id)} itemText={<Edit/>}/>
+                <OverflowMenuItem onClick={() => deleteCallback(row.id)} itemText={<Delete/>}/>
             </OverflowMenu>
         );
     }

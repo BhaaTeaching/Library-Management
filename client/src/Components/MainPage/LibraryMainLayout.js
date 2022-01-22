@@ -13,7 +13,6 @@ const LibraryMainLayout = () => {
 
     let navigate = useNavigate();
     const addEditCallback = useCallback((bookId) => {
-        console.log(" to ");
         navigate(`/editBook/${bookId}`);
     }, [])
 
