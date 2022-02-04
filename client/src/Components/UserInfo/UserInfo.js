@@ -3,6 +3,7 @@ import {Box, Paper, TextField} from "@mui/material";
 import {get} from "../../RestApiCalls/GetRequest";
 import styled from "styled-components";
 import './UserInfo.css';
+import {TextFieldReference, TextFieldStyle} from "../../Utils/Common";
 
 const UserInfo = ({userId}) => {
     const [user, setUser] = useState(null);
@@ -21,9 +22,7 @@ const UserInfo = ({userId}) => {
     }, [])
 
 
-    const TextFieldReference = React.forwardRef((props, ref) => (
-        <TextField ref={ref} {...props} />
-    ));
+
 
     return (
         <div>
@@ -94,6 +93,3 @@ const UserInfo = ({userId}) => {
 export default UserInfo;
 
 
-const TextFieldStyle = styled.div`
-    margin-top: 1.5rem;
-`;

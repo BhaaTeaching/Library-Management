@@ -18,7 +18,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addUser(UserRequestDto userRequestDto) {
+    public User addUser(UserRequestDto userRequestDto) throws ValidationException {
+        boolean isUserExist = userRepository.findById(userRequestDto.getId()).isPresent();
+        if (isUserExist) {
+            throw new ValidationException("User already exist");
+        }
         User user = new User(userRequestDto);
         return userRepository.save(user);
     }
@@ -30,6 +34,15 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("User with id: " + id + " not found");
         }
         return user.get();
+    }
+
+    @Override
+    public User getUserByEmailAndPassword(String email, String password) throws ValidationException {
+        User user = userRepository.findByEmailAndPassword(email,password);
+        if (user == null) {
+            throw new ValidationException("Email or password is invalid");
+        }
+        return user;
     }
 
     @Override

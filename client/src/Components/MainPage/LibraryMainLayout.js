@@ -8,6 +8,8 @@ import UserInfo from "../UserInfo/UserInfo";
 import {remove} from "../../RestApiCalls/DeleteRequest";
 import {NotificationManager} from "react-notifications";
 import {get} from "../../RestApiCalls/GetRequest";
+import Signup from "../Signup/Signup";
+import Signin from "../Signin/Signin";
 
 const LibraryMainLayout = () => {
 
@@ -33,6 +35,8 @@ const LibraryMainLayout = () => {
             </Navbar>
             <Routes>
                 <Route exact path="/" element={<GetAllBooks editCallback={addEditCallback}/>}/>
+                <Route path="/Signup" element={<Signup/>}/>
+                <Route path="/Signin" element={<Signin/>}/>
                 <Route path="/addBook" element={<AddEditBook/>}/>
                 <Route path="/editBook/:bookId" element={<AddEditBook/>}/>
                 <Route path="/userInfo" element={<UserInfo userId={206052933}/>}/>

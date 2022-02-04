@@ -21,12 +21,17 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/add-user")
-    public ResponseEntity<Object> addUser(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<Object> addUser(@RequestBody UserRequestDto userRequestDto) throws ValidationException {
         return responseEntity(userService.addUser(userRequestDto));
     }
 
     @GetMapping("/get-user/{userId}")
     public ResponseEntity<Object> getUserById(@PathVariable Long userId) throws ValidationException {
         return responseEntity(userService.getUserById(userId));
+    }
+
+    @GetMapping("/sigin-user/{email}/{password}")
+    public ResponseEntity<Object> getUserByEmail(@PathVariable String  email, @PathVariable String password) throws ValidationException {
+        return responseEntity(userService.getUserByEmailAndPassword(email, password));
     }
 }

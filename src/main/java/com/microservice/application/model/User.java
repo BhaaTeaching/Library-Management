@@ -25,11 +25,15 @@ public class User {
     private String countryCallingCode;
     @Column
     private String email;
+    @Column
+    private String password;
 
     public User(UserRequestDto userRequestDto) {
         this.id = userRequestDto.getId();
         this.name = userRequestDto.getName();
         this.phone = userRequestDto.getPhone();
         this.email = userRequestDto.getEmail();
+        this.countryCallingCode = userRequestDto.getCountryCallingCode();
+        this.password = userRequestDto.getPassword();
     }
 }

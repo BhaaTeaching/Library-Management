@@ -1,5 +1,6 @@
 const intiState = {
-    books: []
+    books: [],
+    user: []
 };
 
 export default intiState;

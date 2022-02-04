@@ -28,7 +28,8 @@ const GetAllBooks = ({editCallback}) => {
     const [isBlob, setIsBlob] = useState(true);
     const [noFileExist, setNoFileExist] = useState('');
     let navigate = useNavigate();
-    const booksStore = useSelector(state => state.books)
+    const booksStore = useSelector(state => state.books);
+    const userStore = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -104,7 +105,9 @@ const GetAllBooks = ({editCallback}) => {
 
     const loanBookFormatter = (cell, row) => {
         const loanBook = () => {
-            post(`/loan-book?bookId=${row.id}&userId=206052933`).then(response => {
+          //  post(`/loan-book?bookId=${row.id}&userId=206052933`).then(response => {
+            debugger;
+            post(`/loan-book?bookId=${row.id}&userId=${userStore.id}`).then(response => {
                 if (response.ok) {
                     get("/get-books").then(response => {
                         if (response.ok) {
