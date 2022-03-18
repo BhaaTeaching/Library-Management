@@ -23,11 +23,15 @@ dependencies {
 	implementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
 	implementation group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
 	implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.28.Final'
-	compileOnly 'org.projectlombok:lombok:1.18.16'
-	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+
+	compileOnly 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '6.0.3'
 	implementation group: "com.twilio.sdk", name: "twilio", version: "8.22.0"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
 }
 
 test {

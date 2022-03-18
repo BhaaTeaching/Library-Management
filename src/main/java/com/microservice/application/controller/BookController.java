@@ -1,7 +1,11 @@
 package com.microservice.application.controller;
 
 import com.microservice.application.controller.dto.BookDto;
+import com.microservice.application.model.Book;
 import com.microservice.application.services.books.BookService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +29,13 @@ public class BookController extends BaseController {
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }
+
     @PostMapping("/add-book")
+    @ApiOperation(
+            value = "Add book method",
+            notes = "Add book using API"
+    )
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Adding succeed", response = Book.class)})
     public ResponseEntity<Object> addBook(@RequestBody BookDto bookDto) {
         return responseEntity(bookService.addBook(bookDto));
     }
