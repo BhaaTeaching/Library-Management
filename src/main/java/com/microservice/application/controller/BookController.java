@@ -44,27 +44,27 @@ public class BookController extends BaseController {
     }
 
     @GetMapping("/get-book/{bookId}")
-    public ResponseEntity<Object> getBookById(@PathVariable Long bookId) throws NotFoundException {
+    public ResponseEntity<Object> getBookById(@PathVariable Long bookId) throws NotFoundException, SQLException {
         return responseEntity(bookService.getBookById(bookId));
     }
 
     @GetMapping("/get-book-by-name")
-    public ResponseEntity<Object> getBookByName(@RequestParam String name) throws NotFoundException {
+    public ResponseEntity<Object> getBookByName(@RequestParam String name) throws NotFoundException, SQLException {
         return responseEntity(bookService.getBookByName(name));
     }
 
     @GetMapping("/get-book-by-author")
-    public ResponseEntity<Object> getBookByAuthor(@RequestParam String author) throws NotFoundException {
+    public ResponseEntity<Object> getBookByAuthor(@RequestParam String author) throws NotFoundException, SQLException {
         return responseEntity(bookService.getBookByAuthor(author));
     }
 
     @GetMapping("/get-book-by-subject")
-    public ResponseEntity<Object> getBookBySubject(@RequestParam String subject) throws NotFoundException {
+    public ResponseEntity<Object> getBookBySubject(@RequestParam String subject) throws NotFoundException, SQLException {
         return responseEntity(bookService.getBookBySubject(subject));
     }
 
     @PutMapping("edit-book/{bookId}")
-    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookDto bookDto) throws NotFoundException {
+    public ResponseEntity<Object> editDomain(@PathVariable Long bookId, @RequestBody BookDto bookDto) throws NotFoundException, SQLException {
         return responseEntity(bookService.editBook(bookId, bookDto));
     }
 
@@ -74,7 +74,7 @@ public class BookController extends BaseController {
     }
 
     @DeleteMapping("remove-book/{bookId}")
-    public ResponseEntity<Object> removeDomain(@PathVariable Long bookId) throws NotFoundException {
+    public ResponseEntity<Object> removeDomain(@PathVariable Long bookId) throws NotFoundException, SQLException {
         return responseEntity(bookService.removeBook(bookId));
     }
 }

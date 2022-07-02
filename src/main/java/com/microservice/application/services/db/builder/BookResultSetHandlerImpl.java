@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,10 +23,9 @@ public class BookResultSetHandlerImpl implements BookResultSetHandler {
                         resultSet.getString(5), resultSet.getString(6), resultSet.getDate(7),
                         resultSet.getString(8), resultSet.getLong(9))));
             }
-            return bookDtos;
         } catch (SQLException sqlException) {
             log.error("Failed to convert result set to Book: ", sqlException);
         }
-        return Collections.emptyList();
+        return bookDtos;
     }
 }

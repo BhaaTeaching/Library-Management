@@ -13,17 +13,17 @@ public interface BookService {
 
     List<BookDto> getAllBooks() throws SQLException;
 
-    BookDto getBookById(Long bookId) throws NotFoundException;
+    BookDto getBookById(Long bookId) throws NotFoundException, SQLException;
 
-    List<BookDto> getBookByName(String name) throws NotFoundException;
+    List<BookDto> getBookByName(String name) throws NotFoundException, SQLException;
 
-    List<BookDto> getBookByAuthor(String name) throws NotFoundException;
+    List<BookDto> getBookByAuthor(String name) throws NotFoundException, SQLException;
 
-    List<BookDto> getBookBySubject(String name) throws NotFoundException;
+    List<BookDto> getBookBySubject(String name) throws NotFoundException, SQLException;
 
-    Book editBook(Long bookId, BookDto bookDto) throws NotFoundException;
+    Book editBook(Long bookId, BookDto bookDto) throws NotFoundException, SQLException;
 
     String addTableOfContentFile(InputStream tableOfContentFile);
 
-    Book removeBook(Long bookId) throws NotFoundException;
+    Book removeBook(Long bookId) throws NotFoundException, SQLException;
 }
