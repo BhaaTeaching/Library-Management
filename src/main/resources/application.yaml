@@ -6,7 +6,7 @@ spring:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:7306/Library
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:5306/Library
 #    url:  jdbc:mysql://library-management:5306/Library
     username: root
     password: root

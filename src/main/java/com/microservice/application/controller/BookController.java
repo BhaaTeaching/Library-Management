@@ -1,14 +1,12 @@
 package com.microservice.application.controller;
 
 import com.microservice.application.controller.dto.BookDto;
-import com.microservice.application.model.Book;
 import com.microservice.application.services.books.BookService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class BookController extends BaseController {
 
     private final BookService bookService;
@@ -35,13 +33,13 @@ public class BookController extends BaseController {
             value = "Add book method",
             notes = "Add book using API"
     )
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Adding succeed", response = Book.class)})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Adding succeed", response = com.microservice.application.model.Book.class)})
     public ResponseEntity<Object> addBook(@RequestBody BookDto bookDto) {
         return responseEntity(bookService.addBook(bookDto));
     }
 
     @GetMapping("/get-books")
-    public ResponseEntity<Object> getBooks() throws NotFoundException {
+    public ResponseEntity<Object> getBooks() throws NotFoundException, SQLException {
         return responseEntity(bookService.getAllBooks());
     }
 

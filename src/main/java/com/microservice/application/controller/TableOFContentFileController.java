@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class TableOFContentFileController extends BaseController {
     private final FilesService filesService;
 

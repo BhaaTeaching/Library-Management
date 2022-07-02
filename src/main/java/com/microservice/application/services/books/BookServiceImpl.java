@@ -5,24 +5,23 @@ import com.microservice.application.model.Book;
 import com.microservice.application.repositories.BookRepository;
 import com.microservice.application.repositories.LoanRepository;
 import javassist.NotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final LoanRepository loanRepository;
-
-    public BookServiceImpl(BookRepository bookRepository, LoanRepository loanRepository) {
-        this.bookRepository = bookRepository;
-        this.loanRepository = loanRepository;
-    }
+    private final com.microservice.application.services.db.BookRepository bookRepositoryNew;
 
     @Override
     public Book addBook(BookDto bookDto) {
@@ -31,10 +30,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAllBooks() {
-        return ((List<Book>) bookRepository.findAll()).stream()
-                .peek(book -> book.setNearestDateToReturn(loanRepository.findTopWithBookId(book.getId()))).map(BookDto::new)
-                .collect(Collectors.toList());
+    public List<BookDto> getAllBooks() throws SQLException {
+        return bookRepositoryNew.getAllBooks();
+//        return ((List<com.microservice.application.model.Book>) bookRepository.findAll()).stream()
+//                .peek(book -> book.setNearestDateToReturn(loanRepository.findTopWithBookId(book.getId()))).map(Book::new)
+//                .collect(Collectors.toList());
     }
 
     @Override

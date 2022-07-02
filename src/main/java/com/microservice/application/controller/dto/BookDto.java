@@ -1,30 +1,28 @@
 package com.microservice.application.controller.dto;
 
 import com.microservice.application.model.Book;
-import com.microservice.application.model.DatabaseFile;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDto {
 
     private Long id;
-    private String name;
     private String author;
     private Integer copies;
-    private String location;
-    private String subject;
     private Integer existingCopies;
-    private Boolean isAvailable;
+    private String location;
+    private String name;
     private Date nearestDateToReturn;
-    private  DatabaseFile databaseFile;
+    private String subject;
+    //  private  DatabaseFile databaseFile;
+    private Long databaseFileId;
+    private Boolean isAvailable;
 
     public BookDto(Book book) {
         this.id = book.getId();
@@ -36,6 +34,6 @@ public class BookDto {
         this.isAvailable = book.getExistingCopies() != null && book.getExistingCopies() > 0;
         this.location = book.getLocation();
         this.nearestDateToReturn = book.getNearestDateToReturn();
-        this.databaseFile = book.getDatabaseFile();
+        this.databaseFileId = book.getDatabaseFileId();
     }
 }
